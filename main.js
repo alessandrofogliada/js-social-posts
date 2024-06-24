@@ -1,10 +1,6 @@
 
 // Milestone 1 - Leggiamo per bene il nostro array di oggetti che rappresentano ciascun post, così da capire bene i dati come sono strutturati;
 
-//  Colleghiamo il container dove appenderemo tutti i nostri div ecc.
-
-const container = document.getElementById('container');
-
 // Creiamo il nostro array con tutte le informazioni 
 
 const posts = [
@@ -69,129 +65,84 @@ const posts = [
 
 // creare un ciclo per creare tutti i post 
 
-for (let i = 0; i < posts.length; i++ ){
+posts.forEach (element => {
+
+//  Colleghiamo il container dove appenderemo tutti i nostri div ecc.
+
+const container = document.getElementById('container');
 
 // Creo tutti i div che sono riportati in pagina 
 
+let contenutoPost = `
 
-// Primo div 
+<div class="post">
+            <div class="post__header">
+                <div class="post-meta">                    
+                    <div class="post-meta__icon">
+                        <img class="profile-pic" src="${element.author.image}"alt="Phil Mangione">                    
+                    </div>
+                    <div class="post-meta__data">
+                        <div class="post-meta__author">"${element.author.name}"</div>
+                        <div class="post-meta__time">"${element.created}"</div>
+                    </div>                    
+                </div>
+            </div>
+            <div class="post__text">"${element.content}"</div>
+            <div class="post__image">
+            <img src=${element.media} alt=">
+            </div>
+            <div class="post__footer">
+                <div class="likes js-likes">
+                    <div class="likes__cta">
+                        <a class="like-button  js-like-button" href="#" data-postid="${element.id}">
+                            <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
+                            <span class="like-button__label">Mi Piace</span>
+                        </a>
+                    </div>
+                    <div class="likes__counter">
+                        Piace a <b id="${element.id}" class="js-likes-counter">${element.likes}</b> persone
+                    </div>
+                </div> 
+            </div>            
+        </div>`
 
-let post = document.createElement('div');
-
-post.classList.add('post');
-
-container.append(post);
-
-// Secondo div 
-
-let postHeader = document.createElement('div');
-
-postHeader.classList.add('post__header');
-
-post.append(postHeader);
-
-// Terzo div 
-
-let postMeta = document.createElement('div');
-
-postMeta.classList.add('post-meta');
-
-postHeader.append(postMeta);
-
-// Quarto div 
-
-let postMetaIcon = document.createElement('div');
-
-postMetaIcon.classList.add('post-meta__icon');
-
-postMeta.append(postMetaIcon);
-
-
-// Quinto div 
-
-let postMetaData = document.createElement('div');
-
-postMetaData.classList.add('post-meta__icon');
-
-postMeta.append(postMetaData);
-
-// Sesto div 
-
-let postMetaAutor = document.createElement('div');
-
-postMetaAutor.classList.add('post-meta__author');
-
-// postMetaAutor.innerHTML += ('Phil Mangione') ;
-
-postMetaData.append(postMetaAutor);
+container.innerHTML += contenutoPost;
 
 
-// Settimo div 
+});
 
-let postMetaTime = document.createElement('div');
+// creo un nuovo array per i like 
 
-postMetaTime.classList.add('post-meta__time');
+const likedPosts = [];
 
-// postMetaTime.innerText += (' 4 mesi fa');
+// selezione il pulsante like 
 
-postMetaData.append(postMetaTime);
+    let btLikes = document.querySelectorAll('.like-button');
+    let counters = document.querySelectorAll(".js-likes-counter")
 
-// Ottavo div 
+    // funzione per i like e per il cambio colore testo 
 
-let postText = document.createElement('div');
+    for(let i = 0; i < btLikes.length; i++){
+        let likeBt = btLikes[i];
+        // console.log(likeBt);
+        likeBt.addEventListener("click",
+            function(evento){
+            evento.preventDefault();
+            likeBt.classList.add("like-button_liked");
 
-postText.classList.add('post__text');
+            // creo contatore dei like 
+            let counterLike = counters[i];
+            // console.log(counter[i]);
 
-// postText.innerText += ('Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.');
+            // ricavo contenuto del counter 
+            let numeroDiLike = parseInt(counterLike.innerHTML);
+            console.log(numeroDiLike);
 
-post.append(postText);
+            // incrementare di uno il valore di like 
+            numeroDiLike++;
 
-// Nono div 
+            // reinserire il nuovo valore all'interno del counter 
+            counterLike.innerHTML = numeroDiLike;
 
-let postImage = document.createElement('div');
-
-postImage.classList.add('post__image');
-
-// postImage.innerHTML += (`
-// <img src="https://unsplash.it/600/300?image=171" alt="">
-// `);
-
-post.append(postImage);
-
-// Decimo div 
-
-let postFooter = document.createElement('div');
-
-postFooter.classList.add('post__footer');
-
-post.append(postFooter);
-
-
-// Undicesimo div 
-
-let likesJsLikes = document.createElement('div');
-
-likesJsLikes.classList.add('likes_js_likes');
-
-postFooter.append(likesJsLikes);
-
-// // Dodicesimo div 
-
-let likesCta = document.createElement('div');
-
-likesCta.classList.add('likes__cta');
-
-postFooter.append(likesCta);
-
-// Dodicesimo div 
-
-let likesCouter = document.createElement('div');
-
-likesCouter.classList.add('likes__counter');
-
-likesJsLikes.append(likesCouter);
-
-};
-
-
-    // Milestone 3 - Se clicchiamo sul tasto “Mi Piace” cambiamo il colore al testo del bottone e incrementiamo il counter dei likes relativo. Salviamo in un secondo array gli id dei post ai quali abbiamo messo il like.
+        })
+    }
